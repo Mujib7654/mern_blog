@@ -10,7 +10,7 @@ app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 app.get('/', (req,res) => {
-    res.send(`Hello World from port number ${PORT}`);
+    res.send('hello world from server');
 })
 
 app.listen(PORT, () => {
