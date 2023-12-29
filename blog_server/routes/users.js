@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
 
@@ -9,6 +10,8 @@ router.post('/addUser', async(req, res) => {
             user_name : req.body.user_name,
             user_email : req.body.user_email,
             user_dob : req.body.user_dob,
+            //hashing using bcrypt.js
+            // user_dob : bcrypt.hashSync(req.body.user_dob, 10),
             gender : req.body.gender
         });
         const saveUser = await newUser.save();
