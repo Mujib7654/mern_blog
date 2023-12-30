@@ -4,6 +4,7 @@ const router = express.Router();
 
 const User = require('../models/users');
 
+//add user
 router.post('/addUser', async(req, res) => {
     try {
         const newUser = new User({
@@ -21,6 +22,7 @@ router.post('/addUser', async(req, res) => {
     }
 });
 
+//get all user
 router.get('/viewUser', async(req, res) => {
     try {
         const users = await User.find();
@@ -30,11 +32,30 @@ router.get('/viewUser', async(req, res) => {
     }
 });
 
+//get single user
 router.get('/singleUser/:userid', async(req, res) => {
     const uid = req.params.userid;
     try {
         const user = await User.findById(uid);
         res.json(user);
+    } catch (error) {
+        res.status(500).json({'error': error});
+    }
+});
+
+//update
+router.put('/updateUser/:userid', async(req, res) => {
+    const uid = req.params.userid;
+    try {
+        const updateUser = await User.findByIdAndUpdate(
+            uid,
+            //for all
+            // req.body,
+            //for particular
+            {$set: req.body},
+            {new:true}
+        )
+        res.json(updateUser);
     } catch (error) {
         res.status(500).json({'error': error});
     }
