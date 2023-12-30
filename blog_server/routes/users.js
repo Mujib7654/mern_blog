@@ -28,6 +28,16 @@ router.get('/viewUser', async(req, res) => {
     } catch (error) {
         res.status(500).json({'error': error});
     }
+});
+
+router.get('/singleUser/:userid', async(req, res) => {
+    const uid = req.params.userid;
+    try {
+        const user = await User.findById(uid);
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({'error': error});
+    }
 })
 
 module.exports = router;
