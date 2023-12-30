@@ -1,6 +1,10 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 
-// mongoose.connect('mongodb://localhost:27017/blog_mern');
+const dbUri = process.env.DB_URI;
+
+//1st way
+// mongoose.connect(dbUri);
 
 // mongoose.connection.on('connected', () => {
 //     console.log('connected to mongoDB');
@@ -9,9 +13,10 @@ const mongoose = require('mongoose');
 //     console.log('error connected to mongodb:', err);
 // });
 
+//2nd way
 const connectDB = async () => {
     try {
-      await mongoose.connect('mongodb://localhost:27017/blog_mern');
+      await mongoose.connect(dbUri);
       console.log('Connected to MongoDB');
     } catch (err) {
       console.error('Error connecting to MongoDB:', err);
