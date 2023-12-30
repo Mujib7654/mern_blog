@@ -54,8 +54,19 @@ router.put('/updateUser/:userid', async(req, res) => {
             //for particular
             {$set: req.body},
             {new:true}
-        )
+        );
         res.json(updateUser);
+    } catch (error) {
+        res.status(500).json({'error': error});
+    }
+});
+
+//delete
+router.delete('/deleteUser/:userid', async(req, res) => {
+    const uid = req.params.userid;
+    try {
+        const deleteUser = await User.findByIdAndDelete(uid);
+        res.status(200).json({'msg': 'user has been deleted successfully'});
     } catch (error) {
         res.status(500).json({'error': error});
     }
