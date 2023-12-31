@@ -1,6 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
+import axios from 'axios';
 
 const Register = () => {
+
+    const [userData, setUserData] = useState({
+        user_name:'',
+        user_email:'',
+        user_dob:'',
+        gender:'',
+        password:''
+    });
+    const handleInputChange = (e) => {
+        const {name, value} = e.target;
+        setUserData({
+            ...userData,
+            [name]:value
+        })
+    };
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        try {
+            const response = await axios.post('http://localhost:5000/api/user/addUser', userData);
+            console.log(response); 
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
   return (
     <div>
         <table align='center'>
@@ -9,7 +35,7 @@ const Register = () => {
                     Username
                 </td>
                 <td>
-                    <input type='text' name='user_name' />
+                    <input type='text' name='user_name' onChange={handleInputChange}/>
                 </td>
             </tr>
             <tr>
@@ -17,7 +43,7 @@ const Register = () => {
                     Email
                 </td>
                 <td>
-                    <input type='email' name='user_email' />
+                    <input type='email' name='user_email' onChange={handleInputChange} />
                 </td>
             </tr>
             <tr>
@@ -25,7 +51,7 @@ const Register = () => {
                     Dob
                 </td>
                 <td>
-                    <input type='date' name='user_dob' />
+                    <input type='date' name='user_dob' onChange={handleInputChange} />
                 </td>
             </tr>
             <tr>
@@ -33,7 +59,7 @@ const Register = () => {
                     Gender
                 </td>
                 <td>
-                    <select name='gender'>
+                    <select name='gender' onChange={handleInputChange}>
                         <option value={""}>
                             -Select-
                         </option>
@@ -51,12 +77,18 @@ const Register = () => {
                     Password
                 </td>
                 <td>
-                    <input type='password' name='password' />
+                    <input type='password' name='password' onChange={handleInputChange} />
                 </td>
             </tr>
             <tr>
                 <td colSpan={2}>
-                    <button>Registration</button>
+                    <button onClick={handleSubmit}>Registration</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colSpan={2} align='center'>
+                    If already Register <a href='login'>Login</a>
                 </td>
             </tr>
         </table>
