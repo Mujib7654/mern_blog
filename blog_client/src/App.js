@@ -1,12 +1,16 @@
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+
 import Login from "./components/Login";
 import TestBlog from "./components/TestBlog";
 
 function App() {
   return (
-    <>
-      <Login/>
-      <TestBlog/>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path='/' element={<Login/>} />
+        <Route exact path='/test' element={<TestBlog/>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
