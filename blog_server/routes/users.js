@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 //to upload file
 const path = require('path');
 const multer = require('multer');
@@ -28,14 +29,43 @@ router.post('/addUser', async(req, res) => {
             user_name : req.body.user_name,
             user_email : req.body.user_email,
             user_dob : req.body.user_dob,
-            //hashing using bcrypt.js
-            // user_dob : bcrypt.hashSync(req.body.user_dob, 10),
-            gender : req.body.gender
+            gender : req.body.gender,
+            password : await bcrypt.hash(req.body.password, 10)
         });
         const saveUser = await newUser.save();
         res.json(saveUser);
     } catch (error) {
         res.status(500).json({'error': error});
+    }
+});
+
+//login
+router.post('/userlogin', async(req, res) => {
+    try {
+        const email = req.body.user_email;
+        const password = req.body.password;
+
+        if(!email || !password) {
+            return res.status(422).json({error: 'Please Fill All The Fields Properly'})
+        }
+
+        const userlogin = await User.findOne({user_email:email});
+
+        if(userlogin) {
+            const isMatch = await bcrypt.compare(password, userlogin.password);
+
+            if(!isMatch){
+                return res.status(400).json({error: "Invalid Password"});
+            } else{
+                const token = jwt.sign({userId:userlogin._id}, process.env.SECRET_KEY, {expiresIn:'2hr'});
+                return res.status(200).json({msg:'user login successfully', token});
+            }
+
+        } else{
+            return res.status(401).json({error:'Email is not registered.'});
+        }
+    } catch (error) {
+        res.json(error);
     }
 });
 
